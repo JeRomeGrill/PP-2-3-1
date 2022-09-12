@@ -15,14 +15,14 @@ public class UserController {
     @Autowired
     private UserService userService;
     @GetMapping("/create")
-    public String showAddUser() {
+    public String createUserForm(User user) {
         return "create";
     }
 
-    @PostMapping("/save")
-    public String saveUser(@ModelAttribute ("user") User user) {
+    @PostMapping("/create")
+    public String createUser(@ModelAttribute ("user") User user) {
         userService.add(user);
-        return "index";
+        return "redirect:/";
     }
     @GetMapping(value = "/")
     public String printUsers(ModelMap model) {
