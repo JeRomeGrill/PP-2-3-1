@@ -1,21 +1,36 @@
 package web.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+import web.model.User;
+import web.service.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class UserController {
-    @GetMapping(value = "/")
-    public String printUsers(ModelMap model) {
-        List<String> messages = new ArrayList<>();
-        messages.add("Hello!");
-        messages.add("I'm Spring MVC application");
-        messages.add("5.2.0 version by sep'19 ");
-        model.addAttribute("users", messages);
+
+    @Autowired
+    private UserService userService;
+    @GetMapping("/create")
+    public String showAddUser() {
+        return "create";
+    }
+
+    @PostMapping("/save")
+    public String saveUser(@ModelAttribute ("user") User user) {
+        userService.add(user);
         return "index";
     }
+    @GetMapping(value = "/")
+    public String printUsers(ModelMap model) {
+        List<User> users = userService.listUsers();
+        model.addAttribute("users",users);
+        return "index";
+    }
+
+
+
 }
