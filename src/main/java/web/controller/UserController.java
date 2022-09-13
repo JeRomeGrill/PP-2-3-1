@@ -14,23 +14,43 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @GetMapping("/create")
     public String createUserForm(User user) {
         return "create";
     }
 
     @PostMapping("/create")
-    public String createUser(@ModelAttribute ("user") User user) {
+    public String createUser(@ModelAttribute("user") User user) {
         userService.add(user);
         return "redirect:/";
     }
+
     @GetMapping(value = "/")
     public String printUsers(ModelMap model) {
         List<User> users = userService.listUsers();
-        model.addAttribute("users",users);
+        model.addAttribute("users", users);
         return "index";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteUser(@PathVariable("id") Long id) {
+        userService.removeUser(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateUserForm(@PathVariable("id") Long id, ModelMap model) {
+        User user = userService.findById(id);
+        model.addAttribute("user", user);
+        return "update";
+    }
+
+    @PostMapping("/update")
+    public String updateUser(User user) {
+        userService.changeUser(user);
+        return "redirect:/";
+    }
 
 
 }
